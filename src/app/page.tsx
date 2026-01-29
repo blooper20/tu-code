@@ -1,15 +1,38 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, Rocket, ShieldCheck } from "lucide-react";
+import { Github, Rocket, ShieldCheck, LogOut, LayoutDashboard } from "lucide-react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute top-0 -z-10 h-full w-full">
         <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-primary-500/10 blur-[120px] animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-accent-500/10 blur-[120px] animate-pulse delay-700" />
+      </div>
+
+      {/* Auth Navbar (Quick implementation for demo) */}
+      <div className="absolute top-6 right-6 z-50">
+        {session ? (
+          <div className="flex items-center gap-4">
+            <Link href="/admin" className="flex items-center gap-2 text-sm font-medium hover:text-primary-400 transition-colors">
+              <LayoutDashboard className="h-4 w-4" />
+              대시보드
+            </Link>
+            <button
+              onClick={() => signOut()}
+              className="flex items-center gap-2 rounded-lg bg-surface-1 px-4 py-2 text-sm font-medium border border-surface-3 hover:bg-surface-2 transition-all"
+            >
+              <LogOut className="h-4 w-4" />
+              로그아웃
+            </button>
+          </div>
+        ) : null}
       </div>
 
       <main className="container mx-auto px-6 text-center">
@@ -35,14 +58,28 @@ export default function Home() {
             GitHub 연동 포트폴리오 아카이빙 플랫폼입니다.
           </p>
 
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <button className="btn-primary flex items-center gap-2 px-8 py-4 text-lg">
-              시작하기
-            </button>
-            <button className="flex items-center gap-2 rounded-xl border border-surface-3 bg-white/5 py-4 px-8 font-semibold transition-all hover:bg-white/10">
-              <Github className="h-5 w-5" />
-              GitHub으로 로그인
-            </button>
+          <div className="flex flex-col gap-4 sm:flex-row shadow-2xl">
+            {session ? (
+              <Link href="/admin" className="btn-primary flex items-center gap-2 px-8 py-4 text-lg">
+                내 프로젝트 관리하기
+              </Link>
+            ) : (
+              <>
+                <button
+                  onClick={() => signIn("github")}
+                  className="btn-primary flex items-center gap-2 px-8 py-4 text-lg"
+                >
+                  지금 시작하기
+                </button>
+                <button
+                  onClick={() => signIn("github")}
+                  className="flex items-center gap-2 rounded-xl border border-surface-3 bg-white/5 py-4 px-8 font-semibold transition-all hover:bg-white/10"
+                >
+                  <Github className="h-5 w-5" />
+                  GitHub으로 로그인
+                </button>
+              </>
+            )}
           </div>
         </motion.div>
 
