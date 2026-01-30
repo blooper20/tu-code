@@ -32,9 +32,17 @@ export default async function AdminLayout({
             {/* Admin Sidebar */}
             <aside className="w-64 border-r border-surface-3 bg-surface-1/50 backdrop-blur-xl flex flex-col">
                 <div className="p-6">
-                    <Link href="/" className="flex items-center gap-2 font-display text-xl font-bold text-primary-400">
-                        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500" />
-                        Anti-Gravity
+                    <Link href="/" className="flex items-center gap-4 group">
+                        <div className="relative h-16 w-16 flex items-center justify-center shrink-0 transition-transform duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) group-hover:scale-110">
+                            <img
+                                src="/tucode-pamoja-logo.png"
+                                alt="Logo"
+                                className="h-full w-full object-contain mix-blend-screen"
+                            />
+                        </div>
+                        <span className="font-display font-black text-2xl tracking-tighter brand-gradient-text uppercase leading-none">
+                            Tucode<br />Pamoja
+                        </span>
                     </Link>
                 </div>
 
