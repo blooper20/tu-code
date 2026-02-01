@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import Providers from "@/components/providers";
 import Navbar from "@/components/layout/navbar";
@@ -35,7 +36,9 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <Providers>
-          <Navbar />
+          <Suspense fallback={null}>
+            <Navbar />
+          </Suspense>
           {children}
         </Providers>
       </body>
