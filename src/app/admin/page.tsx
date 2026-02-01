@@ -91,8 +91,25 @@ export default async function AdminPage() {
                     </div>
                 </Link>
 
+                {/* Manage Team Tile */}
+                <Link href="/admin/team" className="group relative overflow-hidden rounded-[2rem] bg-surface-1 border border-white/5 p-6 hover:border-pink-500/30 transition-all duration-700">
+                    <div className="flex justify-between items-start mb-6">
+                        <div className="h-10 w-10 rounded-xl bg-pink-500/10 flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform duration-500">
+                            <Users className="h-5 w-5" />
+                        </div>
+                        <ArrowUpRight className="h-5 w-5 text-text-muted group-hover:text-white transition-colors" />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-white mb-1">팀원 관리</h3>
+                        <p className="text-xs text-text-secondary leading-relaxed">
+                            함께하는 동료들을 소개하세요.<br />
+                            프로필과 기술 스택을 관리합니다.
+                        </p>
+                    </div>
+                </Link>
+
                 {/* Add New Tile */}
-                <Link href="/admin/projects/new" className="group relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-orange-600 to-pink-600 p-1px hover:shadow-[0_0_40px_-12px_rgba(255,107,43,0.4)] transition-all duration-700">
+                <Link href="/admin/projects/new" className="group relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-orange-600 to-pink-600 p-1px hover:shadow-[0_0_40px_-12px_rgba(255,107,43,0.4)] transition-all duration-700 lg:col-span-2">
                     <div className="bg-surface-1 rounded-[calc(2rem-1px)] h-full p-6 group-hover:bg-transparent transition-colors duration-700">
                         <div className="flex justify-between items-start mb-6 text-white">
                             <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md group-hover:bg-white/20 transition-transform duration-500 group-hover:scale-110">

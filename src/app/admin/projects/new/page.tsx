@@ -5,14 +5,20 @@ import { Github, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ImagePicker from "@/components/ui/image-picker";
+import RichTextEditor from "@/components/editor/rich-text-editor";
 
 export default function NewProjectPage() {
     const [loading, setLoading] = useState(false);
+    const [customContent, setCustomContent] = useState("");
     const router = useRouter();
 
     async function handleSubmit(formData: FormData) {
         setLoading(true);
         try {
+            // Rich Text Content 추가
+            formData.append("custom_content", customContent);
+
             const result = await createProject(formData);
             if (result?.error) {
                 alert(`에러: ${result.error}`);
@@ -28,7 +34,7 @@ export default function NewProjectPage() {
     }
 
     return (
-        <div className="container mx-auto max-w-2xl">
+        <div className="container mx-auto max-w-2xl pb-20">
             <Link
                 href="/admin/projects"
                 className="flex items-center gap-2 text-text-secondary hover:text-text-primary mb-6 transition-colors"
@@ -58,6 +64,45 @@ export default function NewProjectPage() {
                         className="w-full rounded-xl border border-surface-3 bg-surface-1 px-4 py-3 outline-none focus:border-primary-500 transition-all resize-none"
                         placeholder="프로젝트에 대한 간단한 설명을 입력하세요."
                     />
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-text-secondary">카테고리</label>
+                    <select
+                        name="category"
+                        className="w-full rounded-xl border border-surface-3 bg-surface-1 px-4 py-3 outline-none focus:border-primary-500 transition-all appearance-none"
+                        defaultValue="Web"
+                    >
+                        <option value="Web">Web</option>
+                        <option value="App">App</option>
+                        <option value="AI">AI</option>
+                        <option value="Game">Game</option>
+                        <option value="Design">Design</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <ImagePicker name="thumbnail" label="프로젝트 썸네일 (선택사항)" />
+
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-text-secondary">상세 내용 (Rich Text)</label>
+                    <RichTextEditor
+                        content={customContent}
+                        onChange={setCustomContent}
+                        placeholder="프로젝트에 대한 자세한 내용을 자유롭게 작성하세요 (이미지, 영상 포함 가능)"
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-text-secondary">웹사이트 URL (선택사항)</label>
+                    <div className="relative">
+                        <input
+                            name="website_url"
+                            type="url"
+                            className="w-full rounded-xl border border-surface-3 bg-surface-1 px-4 py-3 outline-none focus:border-primary-500 transition-all"
+                            placeholder="https://example.com"
+                        />
+                    </div>
                 </div>
 
                 <div className="space-y-2">

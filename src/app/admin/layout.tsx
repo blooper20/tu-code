@@ -5,7 +5,8 @@ import {
     Settings,
     LogOut,
     Home as HomeIcon,
-    ChevronRight
+    ChevronRight,
+    Users
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -24,6 +25,7 @@ export default async function AdminLayout({
     const navItems = [
         { label: "대시보드", href: "/admin", icon: LayoutDashboard },
         { label: "프로젝트 관리", href: "/admin/projects", icon: FolderGit2 },
+        { label: "팀원 관리", href: "/admin/team", icon: Users },
         { label: "설정", href: "/admin/settings", icon: Settings },
     ];
 

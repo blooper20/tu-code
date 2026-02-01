@@ -1,12 +1,13 @@
 import { supabaseAdmin } from "@/lib/supabase/server";
-import { Plus, Github, ExternalLink, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import Link from "next/link";
-import { deleteProject } from "@/lib/actions";
+import SortableProjectList from "@/components/admin/sortable-project-list";
 
 export default async function AdminProjectsPage() {
     const { data: projects } = await supabaseAdmin
         .from("projects")
         .select("*")
+        .order("order_index", { ascending: true })
         .order("created_at", { ascending: false });
 
     return (
@@ -31,45 +32,7 @@ export default async function AdminProjectsPage() {
                         <p className="text-text-secondary">아직 등록된 프로젝트가 없습니다.</p>
                     </div>
                 ) : (
-                    projects?.map((project) => (
-                        <div key={project.id} className="card flex items-center justify-between group">
-                            <div className="flex flex-col gap-1">
-                                <h3 className="text-xl font-bold group-hover:text-primary-400 transition-colors">
-                                    {project.title}
-                                </h3>
-                                <div className="flex items-center gap-4 text-sm text-text-secondary">
-                                    {project.github_url && (
-                                        <span className="flex items-center gap-1">
-                                            <Github className="h-3 w-3" />
-                                            {new URL(project.github_url).pathname.slice(1)}
-                                        </span>
-                                    )}
-                                    <span className="flex items-center gap-1">
-                                        <Plus className="h-3 w-3 rotate-45" />
-                                        {project.tags?.join(", ")}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                <Link
-                                    href={`/projects/${project.id}`}
-                                    className="p-2 hover:bg-surface-3 rounded-lg transition-colors"
-                                    target="_blank"
-                                >
-                                    <ExternalLink className="h-5 w-5 text-text-secondary" />
-                                </Link>
-                                <form action={async () => {
-                                    "use server";
-                                    await deleteProject(project.id);
-                                }}>
-                                    <button className="p-2 hover:bg-red-500/10 hover:text-red-500 rounded-lg transition-colors text-text-secondary">
-                                        <Trash2 className="h-5 w-5" />
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    ))
+                    <SortableProjectList projects={projects || []} />
                 )}
             </div>
         </div>

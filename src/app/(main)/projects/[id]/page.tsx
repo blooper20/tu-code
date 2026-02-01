@@ -67,6 +67,16 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                                         GitHub
                                     </a>
                                 )}
+                                {project.website_url && (
+                                    <a
+                                        href={project.website_url}
+                                        target="_blank"
+                                        className="flex items-center gap-2 bg-accent-500/10 text-accent-400 py-1.5 px-3 rounded-lg border border-accent-500/20 hover:bg-accent-500/20 transition-all font-bold"
+                                    >
+                                        <Globe className="h-4 w-4" />
+                                        Website
+                                    </a>
+                                )}
                             </div>
                         </div>
 
@@ -92,13 +102,23 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                             {/* Sticky Sidebar decoration for large screens */}
                             <div className="hidden xl:block absolute -left-12 top-0 bottom-0 w-px bg-gradient-to-b from-primary-500/50 via-surface-3 to-transparent" />
 
+                            {/* Custom Rich Text Content */}
+                            {project.custom_content && (
+                                <div className="prose prose-invert max-w-none mb-16">
+                                    <div dangerouslySetInnerHTML={{ __html: project.custom_content }} />
+                                    <div className="h-px w-full bg-gradient-to-r from-transparent via-surface-3 to-transparent my-12" />
+                                </div>
+                            )}
+
                             {project.readme_content ? (
                                 <MarkdownRenderer content={project.readme_content} />
                             ) : (
-                                <div className="card text-center py-32 bg-surface-1/20 border-dashed border-2 border-surface-3 rounded-3xl">
-                                    <p className="text-text-muted text-lg">No README content available for this project.</p>
-                                    <p className="text-sm text-text-secondary mt-2">The contents are probably fetched but empty or unavailable on GitHub.</p>
-                                </div>
+                                !project.custom_content && (
+                                    <div className="card text-center py-32 bg-surface-1/20 border-dashed border-2 border-surface-3 rounded-3xl">
+                                        <p className="text-text-muted text-lg">No content available for this project.</p>
+                                        <p className="text-sm text-text-secondary mt-2">Add a README on GitHub or write a custom description in the dashboard.</p>
+                                    </div>
+                                )
                             )}
                         </div>
                     </div>

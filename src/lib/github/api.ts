@@ -95,3 +95,44 @@ export async function fetchGitHubRepoInfo(owner: string, repo: string) {
         return null;
     }
 }
+
+/**
+ * GitHub 프로필 URL을 파싱하여 username을 추출합니다.
+ */
+export function parseGitHubProfileUrl(url: string) {
+    try {
+        const path = new URL(url).pathname;
+        const parts = path.split("/").filter(Boolean);
+        if (parts.length >= 1) {
+            return parts[0];
+        }
+    } catch (e) {
+        return null;
+    }
+    return null;
+}
+
+/**
+ * GitHub API를 통해 사용자 정보를 가져옵니다.
+ */
+export async function fetchGitHubUserInfo(username: string) {
+    try {
+        const response = await fetch(`https://api.github.com/users/${username}`, {
+            headers: {
+                Accept: "application/vnd.github.v3+json",
+                ...(process.env.GITHUB_ACCESS_TOKEN && {
+                    Authorization: `Bearer ${process.env.GITHUB_ACCESS_TOKEN}`,
+                }),
+            },
+        });
+
+        if (!response.ok) {
+            console.error(`GitHub API User Info Error: ${response.status} ${response.statusText} for ${username}`);
+            return null;
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching user info:", error);
+        return null;
+    }
+}

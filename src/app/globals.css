@@ -84,7 +84,8 @@
 @layer components {
 
   /* Premium Glassmorphism Button */
-  .btn-premium {
+  .btn-premium,
+  .btn-primary {
     position: relative;
     overflow: hidden;
     padding: 1rem 2.5rem;
@@ -101,13 +102,15 @@
     gap: 0.75rem;
   }
 
-  .btn-premium:hover {
+  .btn-premium:hover,
+  .btn-primary:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 20px 60px -15px rgba(255, 107, 43, 0.7);
     background-position: 100% 100%;
   }
 
-  .btn-premium:active {
+  .btn-premium:active,
+  .btn-primary:active {
     transform: translateY(0) scale(0.98);
   }
 
@@ -141,4 +144,36 @@
     background-clip: text;
     color: transparent;
   }
+}
+
+@layer utilities {
+  .break-keep {
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+}
+
+/* Tiptap Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #6b7280;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.ProseMirror iframe {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 0.5rem;
 }

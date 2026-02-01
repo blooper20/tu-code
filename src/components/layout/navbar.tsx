@@ -1,70 +1,155 @@
 "use client";
 
-import { Github, LayoutDashboard, LogOut, Rocket } from "lucide-react";
+import { Github, LayoutDashboard, LogOut } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+// ... imports
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
     const { data: session } = useSession();
     const pathname = usePathname();
-    const isHome = pathname === "/";
+    const searchParams = useSearchParams();
+
+    // 1. Visibility Logic
+    const [isVisible, setIsVisible] = useState(true); // Default true to avoid flash, controlled by effect
+
+    useEffect(() => {
+        // If not on home page, always visible.
+        if (pathname !== "/") {
+            setIsVisible(true);
+            return;
+        }
+
+        // On Home page, default hidden initially 
+        setIsVisible(false);
+
+        let isHovered = false;
+        let isScrolled = false;
+
+        const updateVisibility = () => setIsVisible(isHovered || isScrolled);
+
+        const handleMouseMove = (e: MouseEvent) => {
+            const inZone = e.clientY < 100;
+            if (inZone !== isHovered) {
+                isHovered = inZone;
+                updateVisibility();
+            }
+        };
+
+        const handleHomeScroll = (e: Event) => {
+            const scrollTop = (e as CustomEvent).detail;
+            const scrolled = scrollTop > 50;
+            if (scrolled !== isScrolled) {
+                isScrolled = scrolled;
+                updateVisibility();
+            }
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("home-scroll", handleHomeScroll);
+
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("home-scroll", handleHomeScroll);
+        };
+    }, [pathname]);
+
+    const isMemberModalOpen = !!searchParams?.get("memberId");
+
+    // Hide Navbar on Admin pages OR when member modal is open
+    if (pathname?.startsWith("/admin") || isMemberModalOpen) return null;
+
+    const navItems = [
+        { name: "About", href: "/" },
+        { name: "Projects", href: "/projects" },
+        { name: "Team", href: "/team" },
+    ];
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-background/50 backdrop-blur-xl border-b border-white/5">
-            <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-4 group shrink-0">
+        <header
+            className={cn(
+                "fixed top-0 left-0 right-0 z-50 h-32 pointer-events-none transition-all duration-500 transform",
+                isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+            )}
+        >
+            {/* Trendy Gradient Mask - Fades out content rolling under the navbar */}
+            <div className="absolute inset-0 bg-gradient-to-b from-[#050508] via-[#050508]/80 to-transparent" />
+
+            <div className="container mx-auto px-6 h-24 flex justify-between items-center relative z-10 pointer-events-auto">
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-4 group">
                     <motion.div
-                        className="relative w-14 h-14 overflow-hidden rounded-full flex items-center justify-center"
+                        className="relative h-12 w-12 flex items-center justify-center shrink-0"
                         whileHover={{ scale: 1.1 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
                         <img
                             src="/tucode-pamoja-logo.png"
                             alt="Logo"
-                            className="w-full h-full object-contain mix-blend-screen"
+                            className="h-full w-full object-contain mix-blend-screen"
                         />
                     </motion.div>
-                    <span className="font-display font-black text-xl md:text-2xl tracking-tighter brand-gradient-text uppercase leading-none whitespace-pre-line">
+                    <span className="font-display font-black text-xl tracking-tighter brand-gradient-text uppercase leading-none whitespace-pre-line hidden md:block">
                         Tucode{"\n"}Pamoja
                     </span>
                 </Link>
 
-                <div className="flex items-center gap-4">
-                    <div className="hidden md:flex items-center gap-8 mr-4 text-sm font-medium text-text-secondary">
-                        <Link href="/#projects" className="hover:text-primary-400 transition-colors">Projects</Link>
-                        <a href="#" className="hover:text-primary-400 transition-colors">Services</a>
-                        <a href="#" className="hover:text-primary-400 transition-colors">Contact</a>
-                    </div>
-
-                    {session ? (
-                        <div className="flex items-center gap-2">
+                {/* Center Navigation - Glassmorphism Pill */}
+                <div className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-1 bg-white/5 backdrop-blur-2xl p-1.5 rounded-full border border-white/10 shadow-xl">
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.href;
+                        return (
                             <Link
-                                href="/admin"
-                                className="flex items-center gap-2 text-sm font-medium hover:text-primary-400 transition-colors bg-surface-1/50 px-4 py-2 rounded-xl border border-surface-3"
+                                key={item.href}
+                                href={item.href}
+                                className={cn(
+                                    "px-6 py-2 rounded-full text-sm font-bold transition-all relative",
+                                    isActive ? "text-white" : "text-white/60 hover:text-white"
+                                )}
                             >
-                                <LayoutDashboard className="h-4 w-4" />
-                                <p className="hidden sm:block">Dashboard</p>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="nav-pill"
+                                        className="absolute inset-0 bg-white/10 rounded-full border border-white/5 shadow-inner"
+                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                    />
+                                )}
+                                <span className="relative z-10">{item.name}</span>
+                            </Link>
+                        );
+                    })}
+                </div>
+
+                {/* Right Side - Auth */}
+                <div className="flex items-center gap-4">
+                    {session ? (
+                        <div className="flex items-center gap-4">
+                            <Link href="/admin" className="text-sm font-bold text-white/70 hover:text-white transition-colors bg-white/5 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 hover:bg-white/10">
+                                대시보드
                             </Link>
                             <button
                                 onClick={() => signOut()}
-                                className="flex items-center gap-2 rounded-xl bg-surface-1/50 px-4 py-2 text-sm font-medium border border-surface-3 hover:bg-surface-2 transition-all text-text-muted"
+                                className="p-2.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white/70 transition-all"
                             >
-                                <LogOut className="h-4 w-4" />
+                                <LogOut className="h-5 w-5" />
                             </button>
                         </div>
                     ) : (
                         <button
                             onClick={() => signIn("github")}
-                            className="flex items-center gap-2 rounded-xl bg-primary-500 hover:bg-primary-400 px-6 py-2 text-sm font-bold text-white transition-all shadow-lg shadow-primary-500/20"
+                            className="flex items-center gap-2 rounded-full bg-white text-black px-6 py-2.5 text-sm font-black hover:bg-white/90 transition-all shadow-xl shadow-white/10"
                         >
                             <Github className="h-4 w-4" />
-                            Sign In
+                            <span className="hidden sm:inline">ADMIN SIGN IN</span>
                         </button>
                     )}
                 </div>
             </div>
-        </nav>
+        </header>
     );
 }
