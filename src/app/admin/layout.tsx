@@ -6,10 +6,12 @@ import {
     LogOut,
     Home as HomeIcon,
     ChevronRight,
-    Users
+    Users,
+    Mail
 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getUnreadMessageCount } from "@/lib/actions/message";
 
 export default async function AdminLayout({
     children,
@@ -17,6 +19,7 @@ export default async function AdminLayout({
     children: React.ReactNode;
 }) {
     const session = await auth();
+    const unreadCount = await getUnreadMessageCount();
 
     if (!session) {
         redirect("/");
@@ -26,6 +29,7 @@ export default async function AdminLayout({
         { label: "대시보드", href: "/admin", icon: LayoutDashboard },
         { label: "프로젝트 관리", href: "/admin/projects", icon: FolderGit2 },
         { label: "팀원 관리", href: "/admin/team", icon: Users },
+        { label: "메시지함", href: "/admin/messages", icon: Mail },
         { label: "설정", href: "/admin/settings", icon: Settings },
     ];
 
@@ -58,6 +62,11 @@ export default async function AdminLayout({
                             <div className="flex items-center gap-3">
                                 <item.icon className="h-5 w-5 group-hover:text-primary-400 transition-colors" />
                                 <span className="font-medium">{item.label}</span>
+                                {item.label === "메시지함" && unreadCount > 0 && (
+                                    <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center ml-1">
+                                        {unreadCount > 99 ? "99+" : unreadCount}
+                                    </span>
+                                )}
                             </div>
                             <ChevronRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all" />
                         </Link>

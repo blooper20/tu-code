@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, X, Code2 } from "lucide-react";
+import { Github, X, Code2, Mail } from "lucide-react";
 import { getTeamMembers, getProjects } from "@/lib/actions";
 import MarkdownRenderer from "@/components/projects/markdown-renderer";
 import TeamCardPremium, { TeamMember } from "@/components/team/team-card-premium";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProjectCard from "@/components/projects/project-card";
+import ContactModal from "@/components/ui/contact-modal";
 
 export default function TeamSection() {
     const [members, setMembers] = useState<TeamMember[]>([]);
@@ -115,6 +116,19 @@ export default function TeamSection() {
                                     </div>
 
                                     <div className="absolute bottom-6 right-6 sm:right-10 flex gap-3">
+                                        <ContactModal
+                                            teamMemberId={selectedMember.id}
+                                            recipientName={selectedMember.name}
+                                            trigger={
+                                                <button className="p-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white transition-all backdrop-blur-md group relative">
+                                                    <Mail className="w-5 h-5" />
+                                                    <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/90 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                                        Send Message
+                                                    </span>
+                                                </button>
+                                            }
+                                        />
+
                                         {selectedMember.github_url && (
                                             <a
                                                 href={selectedMember.github_url}

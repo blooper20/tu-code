@@ -151,33 +151,35 @@ export default function TeamCardPremium({ member, onClick, projectUrl }: { membe
                                             className="group/badge relative block"
                                         >
                                             <motion.div
-                                                className="bg-black/80 backdrop-blur-xl border border-white/10 text-white pl-3 pr-8 py-3 rounded-full flex items-center gap-4 shadow-2xl hover:bg-black hover:scale-105 transition-all outline outline-2 outline-transparent hover:outline-white/10 min-w-[220px]"
-                                                initial={{ y: 20, opacity: 0 }}
-                                                whileInView={{ y: 0, opacity: 1 }}
-                                                transition={{ delay: 0.4 }}
+                                                className="bg-black/60 backdrop-blur-md border border-white/10 text-white pl-2 pr-6 py-2 rounded-full flex items-center gap-3 shadow-xl hover:bg-black/80 hover:scale-105 transition-all outline outline-1 outline-white/5 hover:outline-white/20 min-w-[180px]"
+                                                initial={{ y: 10, opacity: 0, scale: 0.9 }}
+                                                whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                                                viewport={{ once: true }}
+                                                transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.2 }}
                                             >
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 flex items-center justify-center shadow-lg border border-yellow-200/50 flex-shrink-0">
-                                                    <Trophy className="w-5 h-5 text-black/80 fill-black/20" />
+                                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg border border-yellow-200/30 flex-shrink-0">
+                                                    <Trophy className="w-4 h-4 text-black/90" />
                                                 </div>
                                                 <div className="flex flex-col items-start leading-none gap-0.5">
-                                                    <span className="text-[10px] text-yellow-400 font-bold tracking-widest uppercase opacity-90">Main Project</span>
-                                                    <span className="text-sm font-bold text-white text-shadow-sm">{member.representative_project}</span>
+                                                    <span className="text-[9px] text-yellow-500/90 font-bold tracking-widest uppercase">Main Project</span>
+                                                    <span className="text-xs font-bold text-white/90">{member.representative_project}</span>
                                                 </div>
                                             </motion.div>
                                         </Link>
                                     ) : (
                                         <motion.div
-                                            className="bg-black/80 backdrop-blur-xl border border-white/10 text-white pl-3 pr-8 py-3 rounded-full flex items-center gap-4 shadow-2xl cursor-default min-w-[220px]"
-                                            initial={{ y: 20, opacity: 0 }}
-                                            whileInView={{ y: 0, opacity: 1 }}
-                                            transition={{ delay: 0.4 }}
+                                            className="bg-black/60 backdrop-blur-md border border-white/10 text-white pl-2 pr-6 py-2 rounded-full flex items-center gap-3 shadow-xl cursor-default min-w-[180px]"
+                                            initial={{ y: 10, opacity: 0, scale: 0.9 }}
+                                            whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.2 }}
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-700 flex items-center justify-center shadow-lg border border-yellow-200/50 flex-shrink-0">
-                                                <Trophy className="w-5 h-5 text-black/80 fill-black/20" />
+                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center shadow-lg border border-yellow-200/30 flex-shrink-0">
+                                                <Trophy className="w-4 h-4 text-black/90" />
                                             </div>
                                             <div className="flex flex-col items-start leading-none gap-0.5">
-                                                <span className="text-[10px] text-yellow-400 font-bold tracking-widest uppercase opacity-90">Main Project</span>
-                                                <span className="text-sm font-bold text-white text-shadow-sm">{member.representative_project}</span>
+                                                <span className="text-[9px] text-yellow-500/90 font-bold tracking-widest uppercase">Main Project</span>
+                                                <span className="text-xs font-bold text-white/90">{member.representative_project}</span>
                                             </div>
                                         </motion.div>
                                     )}

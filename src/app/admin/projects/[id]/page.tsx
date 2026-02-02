@@ -2,8 +2,9 @@
 
 
 import { updateProject, refreshProjectReadme } from "@/lib/actions";
+import { getProjectMessages } from "@/lib/actions/message";
 import { supabase } from "@/lib/supabase/client";
-import { Github, ArrowLeft, Loader2, RefreshCw, Star } from "lucide-react";
+import { Github, ArrowLeft, Loader2, RefreshCw, Star, Mail, Clock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, use } from "react";
@@ -23,6 +24,7 @@ export default function EditProjectPage({ params }: EditProjectPageProps) {
     const [saving, setSaving] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [customContent, setCustomContent] = useState("");
+    const [messages, setMessages] = useState<any[]>([]);
     const router = useRouter();
 
     useEffect(() => {
@@ -40,6 +42,11 @@ export default function EditProjectPage({ params }: EditProjectPageProps) {
 
             setProject(data);
             setCustomContent(data.custom_content || "");
+
+            // Fetch messages
+            const msgs = await getProjectMessages(id);
+            if (msgs) setMessages(msgs);
+
             setLoading(false);
         }
         fetchProject();
@@ -150,6 +157,8 @@ export default function EditProjectPage({ params }: EditProjectPageProps) {
                     >
                         <option value="Web">Web</option>
                         <option value="App">App</option>
+                        <option value="MCP">MCP</option>
+                        <option value="LLM">LLM</option>
                         <option value="AI">AI</option>
                         <option value="Game">Game</option>
                         <option value="Design">Design</option>
@@ -252,6 +261,47 @@ export default function EditProjectPage({ params }: EditProjectPageProps) {
                     </Link>
                 </div>
             </form>
+
+            {/* Messages Inbox Section */}
+            <div className="mt-16 pt-10 border-t border-surface-3">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <Mail className="h-6 w-6 text-primary-500" />
+                    수신된 메시지함 (Inbox)
+                </h2>
+
+                {messages.length === 0 ? (
+                    <div className="card p-8 text-center bg-surface-1 border-dashed border-2 border-surface-3 rounded-2xl">
+                        <p className="text-text-muted">아직 도착한 메시지가 없습니다.</p>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {messages.map((msg) => (
+                            <div key={msg.id} className="card p-6 bg-surface-1 border border-surface-3 rounded-2xl hover:border-primary-500/30 transition-colors">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-primary-500 font-bold">
+                                            {msg.sender_email.slice(0, 2).toUpperCase()}
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold text-text-primary">{msg.sender_email}</p>
+                                            <div className="flex items-center gap-1 text-xs text-text-muted">
+                                                <Clock className="h-3 w-3" />
+                                                {new Date(msg.created_at).toLocaleString('ko-KR')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-medium border ${msg.status === 'unread' ? 'bg-red-500/10 text-red-500 border-red-500/20' : 'bg-green-500/10 text-green-500 border-green-500/20'}`}>
+                                        {msg.status === 'unread' ? '읽지 않음' : '읽음'}
+                                    </span>
+                                </div>
+                                <div className="pl-13 text-sm text-text-secondary whitespace-pre-wrap leading-relaxed">
+                                    {msg.content}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

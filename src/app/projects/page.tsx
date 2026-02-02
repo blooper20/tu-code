@@ -34,7 +34,7 @@ export default function ProjectsPage() {
                     </div>
 
                     <CategoryFilter
-                        categories={["Web", "App", "AI", "Game", "Design", "Other"]}
+                        categories={["Web", "App", "MCP", "LLM", "AI", "Game", "Design", "Other"]}
                         selectedCategory={category}
                         onSelectCategory={setCategory}
                     />

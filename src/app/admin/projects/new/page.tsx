@@ -76,6 +76,8 @@ export default function NewProjectPage() {
                     >
                         <option value="Web">Web</option>
                         <option value="App">App</option>
+                        <option value="MCP">MCP</option>
+                        <option value="LLM">LLM</option>
                         <option value="AI">AI</option>
                         <option value="Game">Game</option>
                         <option value="Design">Design</option>

@@ -1,46 +1,135 @@
 import { auth } from "@/lib/auth";
 
-import { FolderGit2, Plus, Users, Star, ArrowUpRight, Zap, Target, Activity } from "lucide-react";
+import { FolderGit2, Plus, Users, Star, ArrowUpRight, Zap, Target, Activity, Mail, Rocket, Hammer, AlertOctagon, Layers } from "lucide-react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase/client";
+import { supabaseAdmin } from "@/lib/supabase/server";
+import { getUnreadProjectMessageCount, getUnreadPersonalMessageCount } from "@/lib/actions/message";
+
+export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
     const session = await auth();
 
-    // Fetch real stats
-    const { count: projectCount } = await supabase
+    // Fetch all data for calculations
+    const { data: allProjects } = await supabaseAdmin
         .from("projects")
-        .select("*", { count: 'exact', head: true });
+        .select("id, deployment_status, created_at");
+
+    const { data: allTeamMembers } = await supabaseAdmin
+        .from("team_members")
+        .select("id, created_at");
+
+    // Calculate Counts & Trends
+    const now = new Date();
+    const oneMonthAgo = new Date(new Date().setMonth(now.getMonth() - 1));
+
+    const getTrend = (items: any[]) => {
+        if (!items) return "0%";
+        const current = items.length;
+        const previous = items.filter(i => new Date(i.created_at) < oneMonthAgo).length;
+
+        if (previous === 0) return current > 0 ? "+100%" : "0%";
+        const percent = ((current - previous) / previous) * 100;
+        return `${percent > 0 ? '+' : ''}${percent.toFixed(0)}%`;
+    };
+
+    // 1. Projects Breakdown
+    const normalize = (status: string) => status?.toLowerCase() || '';
+
+    const liveProjects = allProjects?.filter(p => ['live', 'active', 'success', 'production'].includes(normalize(p.deployment_status))) || [];
+    const buildingProjects = allProjects?.filter(p => ['building', 'deploying', 'pending', 'processing'].includes(normalize(p.deployment_status))) || [];
+    const stoppedProjects = allProjects?.filter(p => ['stopped', 'failed', 'archived', 'maintenance', 'error'].includes(normalize(p.deployment_status))) || [];
+
+    // 2. Views Calculations
+    const totalViews = 0; // View count column likely missing, defaulting to 0
+    const avgViews = allProjects?.length ? Math.round(totalViews / allProjects.length) : 0;
+
+    // 3. Unread Messages
+    const unreadProjectCount = await getUnreadProjectMessageCount();
+    const unreadPersonalCount = await getUnreadPersonalMessageCount();
+
+    // 4. Team Count
+    const teamCount = allTeamMembers?.length || 0;
 
     const stats = [
         {
-            label: "활성 프로젝트",
-            value: projectCount || 0,
-            icon: FolderGit2,
+            label: "프로젝트 문의 (안 읽음)",
+            value: unreadProjectCount,
+            icon: Mail,
             color: "from-orange-500/20 to-orange-500/5",
             iconColor: "text-orange-500",
-            description: "현재 전시 중인 작업물"
+            description: "새로운 프로젝트 메시지",
+            highlight: unreadProjectCount > 0,
+            trend: null
         },
         {
-            label: "팀원",
-            value: "1",
-            icon: Users,
+            label: "개인 문의 (안 읽음)",
+            value: unreadPersonalCount,
+            icon: Mail,
             color: "from-pink-500/20 to-pink-500/5",
             iconColor: "text-pink-500",
-            description: "함께하는 동료들"
+            description: "팀원에게 도착한 메시지",
+            highlight: unreadPersonalCount > 0,
+            trend: null
         },
         {
             label: "총 조회수",
-            value: "1,240",
+            value: totalViews.toLocaleString(),
             icon: Activity,
             color: "from-purple-500/20 to-purple-500/5",
             iconColor: "text-purple-500",
-            description: "전체 포트폴리오 노출"
+            description: "전체 포트폴리오 노출",
+            trend: "+0%" // Views history not available
+        },
+        {
+            label: "팀원",
+            value: teamCount,
+            icon: Users,
+            color: "from-emerald-500/20 to-emerald-500/5",
+            iconColor: "text-emerald-500",
+            description: "함께하는 동료들",
+            trend: getTrend(allTeamMembers || [])
+        },
+        {
+            label: "총 프로젝트 수",
+            value: allProjects?.length || 0,
+            icon: Layers,
+            color: "from-cyan-500/20 to-cyan-500/5",
+            iconColor: "text-cyan-500",
+            description: "등록된 전체 프로젝트",
+            trend: getTrend(allProjects || [])
+        },
+        {
+            label: "배포 중인 프로젝트",
+            value: liveProjects.length,
+            icon: Rocket,
+            color: "from-green-500/20 to-green-500/5",
+            iconColor: "text-green-500",
+            description: "정상 서비스 중",
+            trend: getTrend(liveProjects)
+        },
+        {
+            label: "빌드 중인 프로젝트",
+            value: buildingProjects.length,
+            icon: Hammer,
+            color: "from-blue-500/20 to-blue-500/5",
+            iconColor: "text-blue-500",
+            description: "배포/빌드 진행 중",
+            trend: getTrend(buildingProjects)
+        },
+        {
+            label: "중단된 프로젝트",
+            value: stoppedProjects.length,
+            icon: AlertOctagon,
+            color: "from-red-500/20 to-red-500/5",
+            iconColor: "text-red-500",
+            description: "서비스 일시 중지",
+            trend: getTrend(stoppedProjects)
         },
     ];
 
     return (
-        <div className="max-w-5xl mx-auto h-full flex flex-col justify-center space-y-6 py-2">
+        <div className="max-w-7xl mx-auto h-full flex flex-col justify-center space-y-6 py-2">
             {/* Hero Welcome Section - Compact */}
             <div className="relative overflow-hidden rounded-[2.5rem] bg-surface-1 border border-white/5 p-8 lg:p-10">
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 h-64 w-64 bg-primary-500/10 blur-[100px] rounded-full" />
@@ -56,17 +145,23 @@ export default async function AdminPage() {
                 </div>
             </div>
 
-            {/* Visual Stats Grid - Compact */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {stats.map((stat, index) => (
-                    <div key={index} className={`relative overflow-hidden rounded-[2rem] bg-surface-1 border border-white/5 p-5 group hover:border-white/10 transition-all duration-500`}>
+            {/* Visual Stats Grid - Flexible */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {stats.map((stat, index) => ( // 8th item (empty) handled by flow or add another? 7 items fit nicely in 4 cols (last one empty)
+                    <div key={index} className={`relative overflow-hidden rounded-[2rem] bg-surface-1 border ${stat.highlight ? 'border-primary-500/50 shadow-[0_0_20px_-5px_rgba(var(--primary-rgb),0.3)]' : 'border-white/5'} p-5 group hover:border-white/10 transition-all duration-500`}>
                         <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${stat.color} blur-2xl opacity-40 group-hover:opacity-100 transition-opacity`} />
-                        <div className="relative z-10 flex flex-col h-full">
-                            <stat.icon className={`h-7 w-7 ${stat.iconColor} mb-3`} />
-                            <p className="text-[11px] font-medium text-text-muted">{stat.label}</p>
-                            <div className="flex items-baseline gap-2">
-                                <h3 className="text-2xl font-black text-white">{stat.value}</h3>
-                                <span className="text-[10px] text-green-500 font-bold">+12%</span>
+                        <div className="relative z-10 flex flex-col h-full justify-between min-h-[100px]">
+                            <div className="flex justify-between items-start">
+                                <stat.icon className={`h-7 w-7 ${stat.iconColor}`} />
+                                {stat.trend && (
+                                    <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${stat.trend.startsWith('+') ? 'text-green-500 bg-green-500/10' : 'text-text-secondary bg-white/5'}`}>
+                                        {stat.trend}
+                                    </span>
+                                )}
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-black text-white mt-4">{stat.value}</h3>
+                                <p className="text-[11px] font-medium text-text-muted mt-1">{stat.label}</p>
                             </div>
                         </div>
                     </div>

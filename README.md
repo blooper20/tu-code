@@ -1,261 +1,84 @@
-<p align="center">
-  <img src="public/logo.png" alt="Tucode Pamoja Logo" width="120" height="120" />
-</p>
+# Tu-Code (Pamoja)
 
-<h1 align="center">Tucode Pamoja</h1>
+**Tu-Code**는 현대적인 웹 개발 팀을 위한 올인원 포트폴리오 및 프로젝트 관리 플랫폼입니다.  
+직관적인 대시보드를 통해 프로젝트의 배포 상태를 실시간으로 모니터링하고, 클라이언트의 문의를 효율적으로 관리할 수 있습니다.
 
-<p align="center">
-  <strong>Code Together, Vibe Forever</strong>
-</p>
+🔗 **Live Demo:** [https://tucode-pamoja-beta.vercel.app/](https://tucode-pamoja-beta.vercel.app/)
 
-<p align="center">
-  '함께'라는 가치 아래 모여 코드로 소통하고 성장의 온기를 나누는 팀,<br/>
-  우리의 모든 발자취를 이곳에 기록합니다.
-</p>
-
-<p align="center">
-  <a href="#features">Features</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="#getting-started">Getting Started</a> •
-  <a href="#project-structure">Project Structure</a>
-</p>
+![Project Preview](https://tucode-pamoja-beta.vercel.app/opengraph-image.png)
 
 ---
 
-## Features
+## ✨ Key Features
 
-### For Visitors
-- **Project Showcase** - 팀의 프로젝트를 감각적인 카드 UI로 탐색
-- **Category Filtering** - Web, App, AI, Game 등 카테고리별 필터링
-- **Infinite Scroll** - 끊김 없는 스크롤 경험
-- **Project Details** - GitHub README 자동 렌더링 + 커스텀 컨텐츠
-- **Team Introduction** - 팀원 소개 (3D Glassmorphism 카드)
+### 📊 Admin Command Center
+관리자 대시보드는 팀의 모든 활동을 한눈에 파악할 수 있는 사령탑 역할을 합니다.
+- **실시간 통계**: 총 프로젝트 수, 배포/빌드/중단 상태별 프로젝트 현황을 실시간으로 확인합니다.
+- **메시지 알림**: 프로젝트 관련 문의와 팀원 개인 문의를 구분하여 읽지 않은 메시지 수를 알려줍니다.
+- **팀 관리**: 등록된 팀원 현황을 모니터링합니다.
 
-### For Admins
-- **GitHub OAuth** - GitHub 계정으로 간편 로그인
-- **Project CRUD** - 프로젝트 생성, 수정, 삭제
-- **GitHub Integration** - Repository URL 입력 시 README 자동 fetch
-- **Rich Text Editor** - Tiptap 기반 에디터 (이미지, 영상, 링크 지원)
-- **Media Upload** - Supabase Storage를 통한 이미지 업로드
-- **Drag & Drop Sorting** - 프로젝트 순서 변경
-- **Team Management** - 팀원 정보 관리
+### 🚀 Project Management
+프로젝트의 수명 주기를 체계적으로 관리합니다.
+- **상태 추적**: `Live` (배포 중), `Building` (빌드 중), `Stopped` (중단됨) 등 프로젝트의 현재 상태를 시각적으로 관리합니다.
+- **기술 스택 태깅**: 각 프로젝트에 사용된 기술을 태그로 관리하여 포트폴리오를 풍성하게 만듭니다.
 
-### UI/UX
-- **Dark Theme** - 감각적인 다크 모드 디자인
-- **Full Page Scroll** - Scroll Snap 기반 랜딩 페이지
-- **Animations** - Framer Motion 페이지 전환 & 인터랙션
-- **Responsive** - 모바일, 태블릿, 데스크톱 대응
+### 💬 Messaging System
+클라이언트 및 팀 간의 원활한 소통을 지원합니다.
+- **프로젝트 문의**: 특정 프로젝트에 대한 기술적/비즈니스 문의를 수신합니다.
+- **개인 문의**: 팀원 개개인에게 도착한 메시지를 별도로 관리합니다.
 
----
-
-## Tech Stack
-
-| Category | Technology |
-|----------|------------|
-| **Framework** | [Next.js 16](https://nextjs.org/) (App Router) |
-| **Language** | [TypeScript](https://www.typescriptlang.org/) |
-| **Styling** | [Tailwind CSS v4](https://tailwindcss.com/) |
-| **Animation** | [Framer Motion](https://www.framer.com/motion/) |
-| **Auth** | [NextAuth.js v5](https://authjs.dev/) + GitHub Provider |
-| **Database** | [Supabase](https://supabase.com/) (PostgreSQL) |
-| **Storage** | Supabase Storage |
-| **Editor** | [Tiptap](https://tiptap.dev/) |
-| **Drag & Drop** | [dnd-kit](https://dndkit.com/) |
-| **Icons** | [Lucide React](https://lucide.dev/) |
-| **Markdown** | react-markdown + rehype-highlight |
+### 🎨 Premium UI/UX
+사용자 경험을 최우선으로 고려한 디자인 시스템을 적용했습니다.
+- **Modern Aesthetics**: 다크 모드 기반의 세련된 컬러 팔레트와 글래스모피즘(Glassmorphism) 효과.
+- **Micro-Interactions**: `Framer Motion`을 활용한 부드러운 전환과 인터랙티브한 반응.
+- **Responsive Design**: 모바일터 데스크탑까지 완벽하게 대응하는 반응형 레이아웃.
 
 ---
 
-## Getting Started
+## 🛠️ Tech Stack
 
-### Prerequisites
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Database & Auth**: [Supabase](https://supabase.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
 
-- Node.js 18.17+
-- npm or yarn or pnpm
-- Supabase account
-- GitHub OAuth App
+---
 
-### Environment Variables
+## 🚀 Getting Started
 
-`.env.local` 파일을 생성하고 다음 변수를 설정하세요:
+로컬 환경에서 프로젝트를 실행하려면 다음 단계를 따르세요.
 
-```env
-# App
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# NextAuth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key
-
-# GitHub OAuth
-GITHUB_CLIENT_ID=your-github-client-id
-GITHUB_CLIENT_SECRET=your-github-client-secret
-
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-
-# GitHub API (Optional - for higher rate limits)
-GITHUB_ACCESS_TOKEN=your-github-token
+### 1. Clone the repository
+```bash
+git clone https://github.com/Start-Pamoja/tu-code.git
+cd tu-code
 ```
 
-### Installation
-
+### 2. Install dependencies
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/tu-code.git
-cd tu-code
-
-# Install dependencies
 npm install
+```
 
-# Run development server
+### 3. Environment Setup
+루트 디렉토리에 `.env.local` 파일을 생성하고 Supabase 환경 변수를 설정하세요.
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
+
+### 4. Run the development server
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see the result.
-
-### Database Setup
-
-Supabase에서 다음 테이블을 생성하세요:
-
-```sql
--- projects 테이블
-CREATE TABLE projects (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  title VARCHAR(255) NOT NULL,
-  description TEXT,
-  github_url VARCHAR(500),
-  website_url VARCHAR(500),
-  readme_content TEXT,
-  custom_content TEXT,
-  thumbnail_url VARCHAR(500),
-  category VARCHAR(50) DEFAULT 'Web',
-  tags TEXT[],
-  order_index INTEGER DEFAULT 0,
-  is_featured BOOLEAN DEFAULT false,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW(),
-  created_by VARCHAR(100)
-);
-
--- team_members 테이블
-CREATE TABLE team_members (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR(255) NOT NULL,
-  role VARCHAR(255),
-  bio TEXT,
-  github_url VARCHAR(500),
-  profile_image VARCHAR(500),
-  order_index INTEGER DEFAULT 0,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
--- media 테이블 (선택)
-CREATE TABLE media (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
-  url VARCHAR(500) NOT NULL,
-  type VARCHAR(50),
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
+브라우저에서 [http://localhost:3000](http://localhost:3000)을 열어 확인하세요.
 
 ---
 
-## Project Structure
-
-```
-src/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                  # Landing page
-│   ├── projects/                 # Projects list
-│   ├── team/                     # Team page
-│   ├── (main)/projects/[id]/     # Project detail
-│   ├── admin/                    # Admin dashboard
-│   │   ├── projects/             # Project management
-│   │   └── team/                 # Team management
-│   └── api/auth/                 # NextAuth API
-├── components/
-│   ├── ui/                       # Reusable UI components
-│   ├── projects/                 # Project-related components
-│   ├── team/                     # Team-related components
-│   ├── editor/                   # Rich text editor
-│   ├── admin/                    # Admin components
-│   └── layout/                   # Layout components
-├── hooks/                        # Custom React hooks
-└── lib/
-    ├── auth.ts                   # NextAuth configuration
-    ├── actions.ts                # Server Actions
-    ├── supabase/                 # Supabase clients
-    └── github/                   # GitHub API utilities
-```
-
----
-
-## Admin Access
-
-관리자 권한은 `src/lib/constants.ts`의 whitelist로 관리됩니다:
-
-```typescript
-export const ADMIN_WHITELIST = [
-  'your-github-username',
-  // Add more admin GitHub IDs
-];
-```
-
----
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. [Vercel](https://vercel.com)에 GitHub 저장소 연결
-2. 환경 변수 설정
-3. GitHub OAuth 앱의 callback URL 업데이트:
-   - `https://your-domain.vercel.app/api/auth/callback/github`
-4. 배포
-
-### Environment Variables for Production
-
-```env
-NEXTAUTH_URL=https://your-domain.vercel.app
-NEXTAUTH_SECRET=your-production-secret
-# ... 나머지 환경 변수
-```
-
----
-
-## Scripts
-
-```bash
-npm run dev      # Development server
-npm run build    # Production build
-npm run start    # Start production server
-npm run lint     # Run ESLint
-```
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-<p align="center">
-  Made with passion by <strong>Tucode Pamoja</strong>
-</p>
- 
+## 🤝 Team
+**Tu-Code Pamoja Team**  
+우리는 더 나은 개발 문화를 함께 만들어갑니다.

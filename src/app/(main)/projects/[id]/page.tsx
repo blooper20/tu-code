@@ -6,6 +6,7 @@ import Link from "next/link";
 import MarkdownRenderer from "@/components/projects/markdown-renderer";
 import Navbar from "@/components/layout/navbar";
 import type { Metadata } from "next";
+import ContactModal from "@/components/ui/contact-modal";
 
 interface ProjectPageProps {
     params: Promise<{
@@ -186,9 +187,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                             <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-[0.2em]">Contact Author</h4>
                             <p className="text-text-secondary text-sm mb-4">Interested in this project or want to collaborate?</p>
                             <div className="h-px w-full bg-white/10 my-4" />
-                            <button className="text-white text-sm font-bold flex items-center gap-2 hover:opacity-80 transition-opacity">
-                                Send a Message &rarr;
-                            </button>
+                            <ContactModal projectId={project.id} projectTitle={project.title} />
                         </div>
                     </aside>
                 </div>

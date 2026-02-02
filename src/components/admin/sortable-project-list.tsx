@@ -145,17 +145,13 @@ export default function SortableProjectList({ projects: initialProjects }: Sorta
         const { active, over } = event;
 
         if (over && active.id !== over.id) {
-            setProjects((items) => {
-                const oldIndex = items.findIndex((item) => item.id === active.id);
-                const newIndex = items.findIndex((item) => item.id === over.id);
+            const oldIndex = projects.findIndex((item) => item.id === active.id);
+            const newIndex = projects.findIndex((item) => item.id === over.id);
 
-                const newItems = arrayMove(items, oldIndex, newIndex);
+            const newItems = arrayMove(projects, oldIndex, newIndex);
 
-                // Update order on server
-                handleUpdateOrder(newItems);
-
-                return newItems;
-            });
+            setProjects(newItems);
+            handleUpdateOrder(newItems);
         }
     }
 
