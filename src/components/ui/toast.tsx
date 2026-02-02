@@ -43,10 +43,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         error: (msg: string) => addToast(msg, "error"),
     };
 
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
     return (
         <ToastContext.Provider value={value}>
             {children}
-            {typeof window !== "undefined" && createPortal(
+            {mounted && createPortal(
                 <div className="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none">
                     <AnimatePresence mode="popLayout">
                         {toasts.map((t) => (
