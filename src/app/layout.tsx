@@ -25,8 +25,6 @@ export const metadata: Metadata = {
   description: "The most aesthetic way to archive and showcase your GitHub projects.",
 };
 
-export const runtime = "edge";
-
 export default function RootLayout({
   children,
 }: Readonly<{
